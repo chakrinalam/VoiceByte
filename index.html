@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏥 Multilingual Hospital Intake Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="https://cdn-icons-png.flaticon.com/512/2021/2021646.png">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="screen active">
+        <div class="loading-container">
+            <div class="pulse">
+                <i class="fas fa-hospital-alt"></i>
+            </div>
+            <h1>Hospital Intake Assistant</h1>
+            <p class="subtitle">Multilingual Voice-Based Patient Intake System</p>
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-language"></i>
+                    <span>5 Languages</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-microphone"></i>
+                    <span>Voice Input</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-file-medical"></i>
+                    <span>Instant Receipt</span>
+                </div>
+            </div>
+            <button id="startBtn" class="btn-primary">
+                <i class="fas fa-play-circle"></i> Start Assistant
+            </button>
+        </div>
+    </div>
+
+    <!-- Language Selection Screen -->
+    <div id="languageScreen" class="screen">
+        <div class="container">
+            <div class="header">
+                <h1><i class="fas fa-language"></i> Choose Your Language</h1>
+                <p class="subtitle">Select the language you're most comfortable with</p>
+            </div>
+            
+            <div class="language-grid">
+                <div class="language-card" data-lang="english">
+                    <div class="flag">🇺🇸</div>
+                    <h3>English</h3>
+                    <p>Speak in English</p>
+                </div>
+                
+                <div class="language-card" data-lang="hindi">
+                    <div class="flag">🇮🇳</div>
+                    <h3>हिन्दी (Hindi)</h3>
+                    <p>हिंदी में बोलें</p>
+                </div>
+                
+                <div class="language-card" data-lang="telugu">
+                    <div class="flag">🇮🇳</div>
+                    <h3>తెలుగు (Telugu)</h3>
+                    <p>తెలుగులో మాట్లాడండి</p>
+                </div>
+                
+                <div class="language-card" data-lang="kannada">
+                    <div class="flag">🇮🇳</div>
+                    <h3>ಕನ್ನಡ (Kannada)</h3>
+                    <p>ಕನ್ನಡದಲ್ಲಿ ಮಾತನಾಡಿ</p>
+                </div>
+                
+                <div class="language-card" data-lang="malayalam">
+                    <div class="flag">🇮🇳</div>
+                    <h3>മലയാളം (Malayalam)</h3>
+                    <p>മലയാളത്തിൽ സംസാരിക്കുക</p>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <button id="backToHome" class="btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Voice Assistant Screen -->
+    <div id="assistantScreen" class="screen">
+        <div class="container">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <button id="backToLanguage" class="icon-btn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="current-language">
+                        <span id="currentLanguage">English</span>
+                        <div class="lang-indicator"></div>
+                    </div>
+                </div>
+                <h1>Patient Intake</h1>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                    <div class="progress-steps">
+                        <span class="step active">1</span>
+                        <span class="step">2</span>
+                        <span class="step">3</span>
+                        <span class="step">4</span>
+                        <span class="step">5</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assistant Chat Area -->
+            <div class="chat-container">
+                <div class="assistant-message">
+                    <div class="avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message">
+                        <p id="assistantQuestion">Hello! I'm your hospital intake assistant. Please tell me your full name.</p>
+                        <div class="timestamp" id="questionTime"></div>
+                    </div>
+                </div>
+
+                <!-- Patient Response Area -->
+                <div class="patient-response">
+                    <div class="response-display" id="responseDisplay">
+                        <p id="currentResponse">Waiting for your response...</p>
+                    </div>
+                    
+                    <!-- Microphone Button -->
+                    <div class="mic-container">
+                        <button id="micButton" class="mic-btn">
+                            <i class="fas fa-microphone"></i>
+                            <div class="pulse-ring"></div>
+                        </button>
+                        <p class="mic-label">Click and speak</p>
+                        <div class="voice-status" id="voiceStatus">
+                            <i class="fas fa-circle"></i> Ready
+                        </div>
+                    </div>
+                    
+                    <!-- Transcription Display -->
+                    <div class="transcription">
+                        <h4><i class="fas fa-waveform-lines"></i> Live Transcription</h4>
+                        <div class="transcript-box" id="transcriptBox">
+                            <!-- Transcription appears here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <button id="clearBtn" class="btn-secondary">
+                    <i class="fas fa-eraser"></i> Clear
+                </button>
+                <button id="nextBtn" class="btn-primary" disabled>
+                    <i class="fas fa-arrow-right"></i> Next
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receipt Screen -->
+    <div id="receiptScreen" class="screen">
+        <div class="container">
+            <div class="receipt-header">
+                <h1><i class="fas fa-file-medical"></i> Hospital Intake Receipt</h1>
+                <p class="subtitle">Patient details for hospital staff</p>
+            </div>
+
+            <div class="receipt-container">
+                <!-- Left Side - Patient Info -->
+                <div class="receipt-left">
+                    <div class="hospital-logo">
+                        <i class="fas fa-hospital"></i>
+                        <h2>MediCare Hospital</h2>
+                        <p>Emergency & General Care</p>
+                    </div>
+
+                    <div class="patient-details card">
+                        <h3><i class="fas fa-user"></i> Patient Details</h3>
+                        <div class="detail-row">
+                            <span class="label">Name:</span>
+                            <span id="receiptName" class="value">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Age:</span>
+                            <span id="receiptAge" class="value">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Gender:</span>
+                            <span id="receiptGender" class="value">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Language:</span>
+                            <span id="receiptLanguage" class="value">-</span>
+                        </div>
+                    </div>
+
+                    <div class="urgency-card card">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Urgency Level</h3>
+                        <div class="urgency-display">
+                            <div class="urgency-badge" id="urgencyBadge">LOW</div>
+                            <p id="urgencyDescription">Routine checkup</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side - Medical Info -->
+                <div class="receipt-right">
+                    <div class="symptoms-card card">
+                        <h3><i class="fas fa-stethoscope"></i> Symptoms Summary</h3>
+                        <div class="symptoms-box" id="symptomsBox">
+                            No symptoms recorded
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Duration:</span>
+                            <span id="receiptDuration" class="value">-</span>
+                        </div>
+                    </div>
+
+                    <div class="department-card card">
+                        <h3><i class="fas fa-clinic-medical"></i> Suggested Department</h3>
+                        <div class="department-display">
+                            <i class="fas fa-arrow-right" id="deptIcon"></i>
+                            <div>
+                                <h4 id="departmentName">General Medicine</h4>
+                                <p id="departmentDescription">Primary healthcare consultation</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="doctors-card card">
+                        <h3><i class="fas fa-user-md"></i> Available Doctors</h3>
+                        <div class="doctors-list" id="doctorsList">
+                            <!-- Doctors will be inserted here -->
+                        </div>
+                    </div>
+
+                    <div class="disclaimer-card card">
+                        <h3><i class="fas fa-info-circle"></i> Important Notice</h3>
+                        <p class="disclaimer">
+                            <i class="fas fa-exclamation-circle"></i> This is not a medical diagnosis. 
+                            Final assessment and treatment decisions must be made by qualified medical staff. 
+                            In case of emergency, call emergency services immediately.
+                        </p>
+                        <div class="receipt-footer">
+                            <div class="timestamp">
+                                <i class="far fa-clock"></i>
+                                <span id="receiptTimestamp">-</span>
+                            </div>
+                            <div class="receipt-id">
+                                <i class="fas fa-hashtag"></i>
+                                ID: <span id="receiptId">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="receipt-actions">
+                <button id="newPatientBtn" class="btn-secondary">
+                    <i class="fas fa-user-plus"></i> New Patient
+                </button>
+                <button id="printBtn" class="btn-primary">
+                    <i class="fas fa-print"></i> Print Receipt
+                </button>
+                <button id="downloadBtn" class="btn-success">
+                    <i class="fas fa-download"></i> Download PDF
+                </button>
+            </div>
+
+            <!-- JSON Output (For Hackathon Demo) -->
+            <div class="json-output">
+                <h3><i class="fas fa-code"></i> JSON Output (For System Integration)</h3>
+                <pre id="jsonOutput">{
+  "language": "english",
+  "patient": {
+    "name": "John Doe",
+    "age": "30",
+    "gender": "Male"
+  },
+  "complaint": {
+    "symptoms": "Fever and headache",
+    "duration": "2 days"
+  },
+  "triage": {
+    "urgency": "MEDIUM",
+    "suggested_department": "General Medicine"
+  },
+  "timestamp": "2024-01-15T10:30:00Z"
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements for Speech -->
+    <audio id="startSound" src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3"></audio>
+    <audio id="endSound" src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3"></audio>
+    <audio id="errorSound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3"></audio>
+
+    <!-- Scripts -->
+    <script src="data.js"></script>
+    <script src="voice-recognition.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
